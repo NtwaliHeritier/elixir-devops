@@ -77,11 +77,11 @@ jobs:
         run: mix ecto.create && mix ecto.migrate && mix ecto.rollback --all
 
       - name: Run tests with JUnit
-        run: mix test --formatter JUnitFormatter
+        run: mix test
 
       - name: Upload test artifacts
         if: always()
         uses: actions/upload-artifact@v4
         with:
           name: junit-report
-          path: _build/test/lib/*.xml
+          path: _build/test/lib/**/*.xml
