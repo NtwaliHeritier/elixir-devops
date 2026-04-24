@@ -15,10 +15,11 @@ jobs:
   deploy:
     runs-on: ubuntu-latest
 
-  steps:
-    - name: Run ls
-      run: ls
+    defaults:
+      run:
+        working-directory: ./${{ env.EX_APP_DIR }}
 
+  steps:
     - name: Build docker image
       run: docker build -t ${{secrets.IMAGE_REGISTRY}}:${{github.sha}} .
 
