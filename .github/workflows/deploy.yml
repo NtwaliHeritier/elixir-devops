@@ -34,13 +34,7 @@ jobs:
           aws-region: ${{ secrets.AWS_REGION }}
 
       - name: Login to Amazon ECR
-        id: login-ecr
         uses: aws-actions/amazon-ecr-login@v2
 
-      - name: show
-        run: echo ${{ steps.login-ecr.outputs.registry }}
-
       - name: Push image
-        run: |
-          docker push \
-          ${{ steps.login-ecr.outputs.registry }}/ex-app:${{ github.sha }}
+        run: docker push ${{secrets.IMAGE_REGISTRY}}:${{github.sha}}
