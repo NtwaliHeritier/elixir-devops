@@ -71,11 +71,12 @@ jobs:
       - name: Verify db migrations
         run: mix ecto.create && mix ecto.migrate && mix ecto.rollback --all
 
-      - name: Run tests
-        run: mix test
+      - name: Run tests with JUnit
+        run: mix test --formatter JUnitFormatter
 
-      - name: Publish Test Results
-        uses: enricomi/publish-unit-test-result-action@v2
+      - name: Upload test artifacts
         if: always()
+        uses: actions/upload-artifact@v4
         with:
-          junit_files: _build/test/lib/core_api/test-junit-report.xml
+          name: junit-report
+          path: _build/test/lib/*.xml

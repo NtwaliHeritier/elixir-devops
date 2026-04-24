@@ -57,7 +57,8 @@ defmodule ExApp.MixProject do
       {:gettext, "~> 0.26"},
       {:jason, "~> 1.2"},
       {:dns_cluster, "~> 0.1.1"},
-      {:bandit, "~> 1.5"}
+      {:bandit, "~> 1.5"},
+      {:junit_formatter, "~> 3.4", only: :test}
     ]
   end
 
