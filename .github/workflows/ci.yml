@@ -89,8 +89,5 @@ jobs:
           name: junit-report
           path: ${{ env.EX_APP_DIR }}/_build/test/lib/test-results.xml
 
-      - name: View
-        run: ls
-
       - name: Build docker image
-        run: docker build -t ex_app:${{github.sha}} ${{ env.EX_APP_DIR }}
+        run: docker build -t ex_app:${{github.sha}} .
