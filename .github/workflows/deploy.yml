@@ -19,22 +19,22 @@ jobs:
       run:
         working-directory: ./${{ env.EX_APP_DIR }}
 
-  steps:
-    - name: Build docker image
-      run: docker build -t ${{secrets.IMAGE_REGISTRY}}:${{github.sha}} .
+    steps:
+      - name: Build docker image
+        run: docker build -t ${{secrets.IMAGE_REGISTRY}}:${{github.sha}} .
 
-    - name: Configure AWS credentials
-      uses: aws-actions/configure-aws-credentials@v4
-      with:
-        aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-        aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-        aws-region: ${{ secrets.AWS_REGION }}
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ secrets.AWS_REGION }}
 
-    - name: Login to Amazon ECR
-      id: login-ecr
-      uses: aws-actions/amazon-ecr-login@v2
+      - name: Login to Amazon ECR
+        id: login-ecr
+        uses: aws-actions/amazon-ecr-login@v2
 
-    - name: Push image
-      run: |
-        docker push \
-        ${{ steps.login-ecr.outputs.registry }}/ex-app:${{ github.sha }}
+      - name: Push image
+        run: |
+          docker push \
+          ${{ steps.login-ecr.outputs.registry }}/ex-app:${{ github.sha }}
