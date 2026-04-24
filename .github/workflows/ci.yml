@@ -84,4 +84,4 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: junit-report
-          path: _build/test/lib/*.xml
+          path: _build/test/lib/test-results.xml
