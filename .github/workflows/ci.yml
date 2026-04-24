@@ -4,19 +4,12 @@ env:
   EX_APP_DIR: ex_app
 
 on:
-  push:
-    branches:
-      - main
-    paths:
-      - ${{ env.EX_APP_DIR }}/**
-      - .github/workflows/ci.yml
-
   pull_request:
     branches:
       - main
     paths:
-      - ${{ env.EX_APP_DIR }}/**
-      - .github/workflows/ci.yml
+      - "ex_app/**"
+      - ".github/workflows/ci.yml"
 
 jobs:
   test:
@@ -95,6 +88,3 @@ jobs:
         with:
           name: junit-report
           path: ${{ env.EX_APP_DIR }}/_build/test/lib/test-results.xml
-
-      - name: Build docker image
-        run: docker build -t ex_app:${{github.sha}} .
