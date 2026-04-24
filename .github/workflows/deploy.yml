@@ -8,8 +8,8 @@ on:
     branches:
       - main
     paths:
-      - ${{ env.EX_APP_DIR }}/**
-      - .github/workflows/**
+      - "ex_app/**"
+      - ".github/workflows/deploy.yml"
 
 jobs:
   deploy:
