@@ -1,0 +1,78 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    services:
+      db:
+        image: postgres:15.2
+        env:
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: postgres
+          POSTGRES_DB: app_test
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd="pg_isready -U postgres"
+          --health-interval=10s
+          --health-timeout=5s
+          --health-retries=5
+
+    env:
+      MIX_ENV: test
+      DATABASE_URL: ecto://postgres:postgres@db/app_test
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup BEAM
+        uses: erlef/setup-beam@v1
+        with:
+          elixir-version: "1.17.3"
+          otp-version: "27"
+
+      - name: Cache deps
+        uses: actions/cache@v4
+        with:
+          path: |
+            deps
+            _build
+          key: ${{ runner.os }}-mix-${{ hashFiles('mix.lock') }}
+
+      - name: Install dependencies
+        run: mix deps.get
+
+      - name: Checking retired dependencies
+        run: mix hex.audit
+
+      - name: Finding unused dependencies
+        run: mix deps.unlock --check-unused
+
+      - name: Security audit of dependencies
+        run: mix deps.audit
+
+      - name: Format check
+        run: mix format --check-formatted
+
+      - name: Compile
+        run: mix compile --all-warnings --warnings-as-errors
+
+      - name: Verify db migrations
+        run: mix ecto.create && mix ecto.migrate && mix ecto.rollback --all
+
+      - name: Run tests
+        run: mix test
+
+      - name: Publish Test Results
+        uses: enricomi/publish-unit-test-result-action@v2
+        if: always()
+        with:
+          junit_files: _build/test/lib/core_api/test-junit-report.xml
