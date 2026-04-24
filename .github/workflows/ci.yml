@@ -1,22 +1,22 @@
 name: CI
 
+env:
+  EX_APP_DIR: ex_app
+
 on:
   push:
     branches:
       - main
     paths:
-      - ex_app/**
+      - ${{ env.EX_APP_DIR }}/**
       - .github/workflows/ci.yml
 
   pull_request:
     branches:
       - main
     paths:
-      - ex_app/**
+      - ${{ env.EX_APP_DIR }}/**
       - .github/workflows/ci.yml
-
-env:
-  EX_APP_DIR: ex_app
 
 jobs:
   test:
