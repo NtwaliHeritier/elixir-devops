@@ -51,10 +51,15 @@ jobs:
           path: |
             deps
             _build
-          key: ${{ runner.os }}-mix-${{ hashFiles('mix.lock') }}
+          key: ${{ runner.os }}-mix-deps-${{ hashFiles('ex_app/mix.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-mix-deps-
 
       - name: Install dependencies
         run: mix deps.get
+
+      - name: Compile dependencies
+        run: mix deps.compile
 
       - name: Checking retired dependencies
         run: mix hex.audit
