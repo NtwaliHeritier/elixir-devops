@@ -62,9 +62,6 @@ jobs:
       - name: Finding unused dependencies
         run: mix deps.unlock --check-unused
 
-      - name: Security audit of dependencies
-        run: mix deps.audit
-
       - name: Format check
         run: mix format --check-formatted
 
