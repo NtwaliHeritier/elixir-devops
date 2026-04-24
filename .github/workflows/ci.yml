@@ -8,13 +8,16 @@ on:
     branches:
       - main
 
+env:
+  EX_APP_DIR: ex_app
+
 jobs:
   test:
     runs-on: ubuntu-latest
 
     defaults:
       run:
-        working-directory: ./ex_app
+        working-directory: ./${{ env.EX_APP_DIR }}
 
     services:
       db:
@@ -49,9 +52,9 @@ jobs:
         uses: actions/cache@v4
         with:
           path: |
-            deps
-            _build
-          key: ${{ runner.os }}-mix-deps-${{ hashFiles('ex_app/mix.lock') }}
+            ${{ env.EX_APP_DIR }}/deps
+            ${{ env.EX_APP_DIR }}/_build
+          key: ${{ runner.os }}-mix-deps-${{ hashFiles('${{ env.EX_APP_DIR }}/mix.lock') }}
           restore-keys: |
             ${{ runner.os }}-mix-deps-
 
@@ -84,4 +87,4 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: junit-report
-          path: ex_app/_build/test/lib/test-results.xml
+          path: ${{ env.EX_APP_DIR }}/_build/test/lib/test-results.xml
