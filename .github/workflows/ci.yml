@@ -4,9 +4,16 @@ on:
   push:
     branches:
       - main
+    paths:
+      - ex_app/**
+      - .github/workflows/ci.yml
+
   pull_request:
     branches:
       - main
+    paths:
+      - ex_app/**
+      - .github/workflows/ci.yml
 
 env:
   EX_APP_DIR: ex_app
